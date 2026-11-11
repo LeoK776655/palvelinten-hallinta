@@ -2,8 +2,39 @@
 
 ## Lue ja tiivistä
 
-### Apache with Ansible
+### Apache installed with Ansible
 
+- Ydinkonsepti: package, file, service
+- Rakenne koostuu "master" kopioista konfiguraatiotiedostosta, varsinaisesta suorittavasta YAML-tiedostosta ja handlerista joka restarttaa daemonin.
+
+Jos netti kaatuisi kesken asennuksen, mitä loppuprosessille käy?
+
+### Handlers: running operations on change
+
+- Käsittelee aivan samoja tehtäviä kuin muutkin
+- On passiivinen niin kauas kunnes saa kutsun aktivoitua
+- Oletuksena ajetaan vasta playbookin päätteeksi
+- notify (kutsu) tulee olla tismalleen sama nimi kuin handlerilla
+
+Jos on monta eri handleria voiko ne saada tekemään tehtävänsä vielä tietyssä järjestyksessä kun heidän vuoronsa suorittaa tulee?
+
+### ansible-doc service
+
+- Työkalu jolla ohjelmia voidaan käynnistää ja sammuttaa riippumatta init-järjestelmästä käytetään
+- `enabled` määrittää käynnistyykö kyseinen palvelu automaattisesti startupissa tai palvelimen käynnistyksessä (yes tai no)
+- `name` määrittää nimen ohjelmalle jota halutaan hallita
+- `state` määrittää mihin tilaan palvelu halutaan laittaa. `started` varmistaa sen olevan päällä. `stopped` sammuttaa. `restarted` käynnistää uudelleen ja `reloaded` lataa sen uudestaan käynnistämättä.
+
+Esimerkki
+
+```
+- name: Start service httpd, if not started
+  ansible.builtin.service:
+    name: httpd
+    state: started
+```
+
+Onko loppujen lopuksi `restarted` ja `reloaded` minkäänlaista merkittävää eroa?
 
 ## a) Apache
 
@@ -108,3 +139,5 @@ Apache. 2026. Luettavissa: https://httpd.apache.org/docs/2.4/. Luettu 10.11.2026
 Karvinen, T. 2026. Apache installed with Ansible. Luettavissa: https://terokarvinen.com/apache-ansible/. Luettu 10.11.2026
 
 Ansible Community Documentation. 2026. Handlers: running operations on change. Luettavissa: https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_handlers.html. Luettu 10.11.2026
+
+Tekoälyä hyödynnetty materiaalin ja rakenteiden ymmärtämiseen.
